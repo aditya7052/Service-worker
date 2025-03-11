@@ -1,5 +1,5 @@
 const CACHE_NAME = "my-cache-v1";
-const urlsToCache = ["/", "/index.html", "/styles.css", "/app.js", "/logo1.png"];
+const urlsToCache = ["/", "/index.html", "/style.css", "/app.js", "/logo1.png"];
 // Install event: Caches the assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
