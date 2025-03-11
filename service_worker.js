@@ -6,23 +6,30 @@ const urlsToCache = [
   "/app.js",
   "/logo1.png",
 ];
+
 // Install event: Caches the assets
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log("Caching assets");
-      return cache.addAll(urlsToCache);
+      console.log("Caching assets...");
+      return cache.addAll(urlsToCache).catch((err) => {
+        console.error("Cache error:", err);
+      });
     })
   );
 });
-// Fetch event: Serves cached assets
+
+// Fetch event: Serves cached assets with a fallback to network
 self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
+      return response || fetch(event.request).catch(() => {
+        console.error("Fetch failed for:", event.request.url);
+      });
     })
   );
 });
+
 // Activate event: Clears old caches
 self.addEventListener("activate", (event) => {
   event.waitUntil(
